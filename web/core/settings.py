@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'account.middleware.LoginRequiredMiddleware',
+    # 'account.middleware.LoginRequiredMiddleware',
     ]
 
 ROOT_URLCONF = 'core.urls'
@@ -87,8 +87,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'twitterkafka',
+        'ENFORCE_SCHEMA': True,
+        'CLIENT': {
+            'host': 'localhost',
+            'port': 27017,
+            'username': 'root',
+            'password': 'ndHBUJ2x',
+        }
     }
 }
 

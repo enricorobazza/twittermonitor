@@ -1,0 +1,17 @@
+
+{% extends '../base.html' %}
+{% load static %}
+
+{% block scss %}{% endblock %}
+
+{% block head %}
+    <title> TwitterKafka </title>
+{% endblock %}
+
+{% block body %}
+    {{teste}}
+    <div id="root"></div>
+    <script src="{% static 'js/teste.bundle.js' %}"></script>
+{% endblock %}
+
+
