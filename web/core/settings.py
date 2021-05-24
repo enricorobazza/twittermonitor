@@ -91,10 +91,10 @@ DATABASES = {
         'NAME': 'twitterkafka',
         'ENFORCE_SCHEMA': True,
         'CLIENT': {
-            'host': 'localhost',
-            'port': 27017,
-            'username': 'root',
-            'password': 'ndHBUJ2x',
+            'host': os.environ["DB_HOST"],
+            'port': int(os.environ["DB_PORT"]),
+            'username': os.environ["DB_USER"],
+            'password': os.environ["DB_PASSWORD"],
         }
     }
 }
