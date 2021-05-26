@@ -22,3 +22,11 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+
+class Tweet(models.Model):
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="tweet")
+    tweet = models.TextField(max_length=280)
+    time = models.DateTimeField()
+
+    def __str__(self):
+        return self.tweet

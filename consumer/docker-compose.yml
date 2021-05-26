@@ -1,0 +1,14 @@
+version: "2.1"
+
+services:
+  consumer:
+    build: .
+    container_name: twitter-consumer
+    environment:
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_HOST=${KAFKA_HOST}
+      - API_HOST=${API_HOST}
+    command: python3 consumer.py
+    restart: unless-stopped
+    network_mode: "host"
