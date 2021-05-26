@@ -1,18 +1,16 @@
 # importando as bibliotecas
 from kafka import KafkaConsumer
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
 import json
-from IPython.display import clear_output
-from predict import SentimentPrediction
+# from predict import SentimentPrediction
 from googletrans import Translator
+import os
 
 #configuração do kafka
-brokers = ['localhost:9092']
-topic = 'tweets'
-pred = SentimentPrediction()
+brokers = ['%s:%s'%(os.environ.get("KAFKA_HOST"), os.environ.get("KAFKA_PORT"))]
+topic = os.environ.get("KAFKA_TOPIC")
+# pred = SentimentPrediction()
 translator = Translator()
-print("Finished training")
+# print("Finished training")
 consumer = KafkaConsumer(topic, group_id = None, bootstrap_servers = brokers)
 
 positivo = 0
@@ -25,14 +23,13 @@ for messagem in consumer:
     frase = translator.translate(texto['tweet'], dest='pt').text
     print(frase)
     # print(texto['tweet'])
-    clear_output()
-    resp = pred.predict_text(frase)
-    if resp == 1:
-        positivo += 1
-    else:
-        negativo += 1
+    # resp = pred.predict_text(frase)
+    # if resp == 1:
+    #     positivo += 1
+    # else:
+    #     negativo += 1
 
-    print("Positivo: %d, Negativo: %d"%(positivo, negativo))
+    # print("Positivo: %d, Negativo: %d"%(positivo, negativo))
     # print(pred.predict_text(texto['tweet']))
 
 
