@@ -15,7 +15,17 @@ This is a Python project that utilizes Twitter API for reading streams of tweets
 ```
     docker-compose exec kafka kafka-topics \
   --create \
-  --bootstrap-server localhost:9092 \
+  --bootstrap-server localhost:9091 \
+  --replication-factor 1 \
+  --partitions 1 \
+  --topic tweets2
+```
+
+```
+    docker-compose exec kafka kafka-topics \
+  --create \
+  --if-not-exists \
+  --zookeeper zookeeper:2181 \
   --replication-factor 1 \
   --partitions 1 \
   --topic tweets
