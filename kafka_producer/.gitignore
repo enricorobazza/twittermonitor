@@ -1,6 +1,0 @@
-.venv
-.env
-zk-single-kafka-single
-__pycache__
-.vscode
-imdb-reviews-pt-br.csv

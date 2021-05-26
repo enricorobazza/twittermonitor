@@ -1,0 +1,87 @@
+version: "2.1"
+
+services:
+  zookeeper:
+    image: zookeeper:3.4.9
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
+    volumes:
+      - ./zk-single-kafka-single/zookeeper/data:/data
+      - ./zk-single-kafka-single/zookeeper/datalog:/datalog
+    networks:
+      - kafka-network
+
+  kafka:
+    image: confluentinc/cp-kafka:5.3.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "${KAFKA_PORT}:${KAFKA_PORT}"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:${KAFKA_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./zk-single-kafka-single/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka-network
+
+      # kafka-topics \
+      # --create \
+      # --bootstrap-server localhost:9092 \
+      # --replication-factor 1 \
+      # --partitions 1 \
+      # --topic tweets
+
+  kafka-setup:
+    image: confluentinc/cp-kafka:5.3.0
+    hostname: kafka-setup
+    container_name: kafka-setup
+    depends_on:
+      - kafka
+    command: "bash -c 'echo Waiting for Kafka to be ready... && cub kafka-ready -b localhost:${KAFKA_PORT} 1 20 && kafka-topics --create --if-not-exists --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --topic ${KAFKA_TOPIC}'"
+    # command: "bash -c 'echo Waiting for Kafka to be ready... && cub kafka-ready -b localhost:${KAFKA_PORT} 1 20 && kafka-topics --create --bootstrap-server localhost:${KAFKA_PORT} --partitions 1 --replication-factor 1 --topic ${KAFKA_TOPIC}'"
+    environment:
+      # The following settings are listed here only to satisfy the image's requirements.
+      # We override the image's `command` anyways, hence this container will not start a broker.
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+    network_mode: "host"
+    # networks:
+    #   - kafka-network
+    restart: on-failure
+    # restart: unless-stopped
+
+  producer:
+    build: .
+    container_name: twitter-producer
+    environment:
+      - API_KEY=${API_KEY}
+      - API_SECRET_KEY=${API_SECRET_KEY}
+      - BEARER_TOKEN=${BEARER_TOKEN}
+      - ACCESS_TOKEN=${ACCESS_TOKEN}
+      - ACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET
+      - API_HOST=${API_HOST}
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+    command: python3 producer.py
+    restart: unless-stopped
+    network_mode: "host"
+    depends_on:
+      - kafka
+
+networks:
+  kafka-network:
+    driver: bridge
