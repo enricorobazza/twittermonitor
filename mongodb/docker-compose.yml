@@ -9,7 +9,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=ndHBUJ2x
     volumes:
-      - /Users/enrico/Documents/Faculdade/Computação\ em\ Nuvem/gcloud10/database:/data/db
+      - /Users/enrico/Documents/Faculdade/Nuvem/gcloud10/database:/data/db
     ports:
       - 27017:27017
     restart: unless-stopped

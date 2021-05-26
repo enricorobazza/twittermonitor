@@ -8,6 +8,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 RUN mkdir -p /opt/app
 RUN mkdir -p /opt/app/pip_cache
 RUN mkdir -p /opt/app/twitterkafka
+RUN mkdir -p /var/log/gunicorn
+RUN touch /var/log/gunicorn/gunicorn_log
 COPY requirements.txt start-server.sh /opt/app/
 COPY .pip_cache /opt/app/pip_cache/
 COPY . /opt/app/twitterkafka/
@@ -15,6 +17,6 @@ WORKDIR /opt/app
 RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
 RUN chown -R www-data:www-data /opt/app
 
-EXPOSE 2195
+EXPOSE 8001
 STOPSIGNAL SIGTERM
 CMD ["/opt/app/start-server.sh"]

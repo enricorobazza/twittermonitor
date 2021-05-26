@@ -1,11 +1,14 @@
 server {
-    listen 2195;
+    listen 8001;
     server_name andromeda.lasdpc.icmc.usp.br;
 
     location / {
-        proxy_pass http://127.0.0.1:2196;
+        proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 50000;
+        proxy_read_timeout 50000;
+        proxy_send_timeout 50000;
     }
     location /static {
         root /opt/app/twitterkafka;
