@@ -26,14 +26,16 @@ class PrintingListener(JsonStreamListener):
         frase = str(tweet['text'])
         data_e_hora_completa = datetime.now()
         data_string = data_e_hora_completa.strftime('%Y-%m-%d %H:%M:%S')
-        dados = {"track": track, "tweet": frase, "horario": data_string}
+        dados = {"track": track, "tweet": frase, "time": data_string}
         print("sending to kafka: ", track)
         producer.send(topico, value=dados)
         return True
 
 class TermChecker(checker.TermChecker):
     def update_tracking_terms(self):
-        response = urllib.request.urlopen("%s/api/words"%os.environ.get('API_HOST'))
+        url = "%s/api/words"%os.environ.get('API_HOST')
+        print(url)
+        response = urllib.request.urlopen(url)
         data = json.load(response)
         print(data)
         return set(data)

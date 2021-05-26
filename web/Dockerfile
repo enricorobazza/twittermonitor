@@ -17,6 +17,5 @@ WORKDIR /opt/app
 RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
 RUN chown -R www-data:www-data /opt/app
 
-EXPOSE 8001
 STOPSIGNAL SIGTERM
 CMD ["/opt/app/start-server.sh"]
