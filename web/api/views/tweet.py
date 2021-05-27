@@ -3,23 +3,27 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import AllowAny
-
-# class TweetView:
-#     def add_tweet(request):
-#         if request.method == "POST":
-#             track_word = request.POST["track"]
-#             tweet_text = request.POST["tweet"]
-#             time = request.POST["time"]
-
-#             track = get_object_or_404(Track, word = track_word)
-#             tweet = Tweet(track=track, tweet=tweet_text, time=time)
-#             tweet.save()
-#             return JsonResponse({"success": True}, safe=False)
-#         else:
-#             return JsonResponse({"error": "wrong method", "success": False}, safe=False)
+from rest_framework import status
+from rest_framework.response import Response
 
 class TweetSerializer(serializers.ModelSerializer):
-# class AtivoSerializer(serializers.HyperlinkedModelSerializer):
+    tracks = serializers.PrimaryKeyRelatedField(many = True, queryset=Track.objects.all())
+
+    def create(self, validated_data):
+        tracks = validated_data.pop('tracks', [])  # Extract relation data
+        tweet_instance = Tweet.objects.create(**validated_data)  # Save the instance w/o relations
+        tweet_instance.tracks.add(*tracks)  # Add our relations to the instance
+        tweet_instance.save()  # Save the instance w/ relations added
+        return tweet_instance
+    
+    def update(self, validated_data, instance):
+        # Update which can add new relations, but CANNOT remove them
+        pk = validated_data.pop('pk', None)  # Fetch our target pk
+        tracks = validated_data.pop('tracks', [])  # Extract relation data
+        tweet_instance = Tweet.objects.fetch(pk=pk).update(**validated_data)  # Update non-relational data
+        tweet_instance.tracks.add(*tracks)  # Add our relations
+        tweet_instance.save()  # Save our instance w/ relations added
+        return tweet_instance
     class Meta:
         model = Tweet
         fields = "__all__"
@@ -31,12 +35,10 @@ class TweetApiSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
-        track = get_object_or_404(Track, word = request.data["track"])
-        request.data["track"] = track.pk
+        sentences = request.data["tracks"]
+        if len(sentences) > 0 and type(sentences[0]) is str:
+            tracks = Track.objects.filter(sentence__in=sentences)
+        else:
+            tracks = sentences
+        request.data["tracks"] = [track.pk for track in tracks]
         return super(TweetApiSet, self).create(request, args, kwargs)
-
-        # serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        # self.perform_create(serializer)
-        # headers = self.get_success_headers(serializer.data)
-        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

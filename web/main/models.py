@@ -5,28 +5,37 @@ from account.models import User
 # Create your models here.
 
 class Track(models.Model):
-    word = models.CharField(max_length=40)
+    sentence = models.CharField(max_length=40)
+    objects = models.DjongoManager()
 
     def __str__(self):
-        return self.word
+        return self.sentence
 
 class Group(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group")
     name = models.CharField(max_length=50)
     # words = models.ManyToManyField(Track)
-    words = models.ArrayReferenceField(
+    tracks = models.ArrayReferenceField(
         to=Track,
         on_delete=models.CASCADE,
     )
+    objects = models.DjongoManager()
 
     def __str__(self):
         return self.name
 
 
 class Tweet(models.Model):
-    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="tweet")
-    tweet = models.TextField(max_length=280)
+    tracks = models.ArrayReferenceField(
+        to=Track,
+        on_delete=models.CASCADE,
+        related_name="tweet",
+        blank=True,
+        null = True
+    )
+    text = models.TextField(max_length=280)
     time = models.DateTimeField()
+    objects = models.DjongoManager()
 
     def __str__(self):
-        return self.tweet
+        return self.text

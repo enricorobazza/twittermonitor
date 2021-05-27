@@ -1,13 +1,31 @@
+from ssl import match_hostname
 from time import sleep, time
 import logging
-
+import json
 import tweepy
 
 logger = logging.getLogger(__name__)
 
 class CustomStream(tweepy.Stream):
-   def _data(self, data):
-        if self.listener.on_data(data, self.body["track"].decode("utf8")) is False:
+
+    def get_track(self, data):
+        tweet = json.loads(data)
+        tweet = str(tweet['text'])
+        sentences = self.body["track"].decode("utf-8").split(",")
+        match_sentences = []
+        for sentence in sentences:
+            is_from_sentence = True
+            words = sentence.split()
+            for word in words:
+                if word.lower() not in tweet.lower():
+                    is_from_sentence = False
+                    break
+            if is_from_sentence:
+                match_sentences.append(sentence)
+        return match_sentences
+
+    def _data(self, data):
+        if self.listener.on_data(data, self.get_track(data)) is False:
             self.running = False
 
 class DynamicTwitterStream(object):
