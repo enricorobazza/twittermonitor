@@ -33,7 +33,7 @@ class PrintingListener(JsonStreamListener):
 
 class TermChecker(checker.TermChecker):
     def update_tracking_terms(self):
-        url = "%s/api/words"%os.environ.get('API_HOST')
+        url = "%s/api/track"%os.environ.get('API_HOST')
         print(url)
         response = urllib.request.urlopen(url)
         data = json.load(response)

@@ -17,6 +17,6 @@ urlpatterns = [
                 jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     ])),
     path('auth/', include('rest_framework.urls')),
-    path('words/', GroupView.get_words, name="get_words"),
+    path('track/', GroupView.get_tracks, name="get_tracks"),
     # path('tweet', TweetView.add_tweet, name="add_tweet")
 ]
