@@ -26,13 +26,13 @@ for message in consumer:
     kafka_data = json.loads(message.value.decode('utf-8'))
     frase = translator.translate(kafka_data['tweet'], dest='pt').text
     print(frase)
-    data = {"track": kafka_data["track"], "text": frase, "time": kafka_data["time"]}
+    data = {"tracks": kafka_data["track"], "text": frase, "time": kafka_data["time"]}
     # data = str(json.dumps(data))
     # data = data.encode('utf-8')
-
     req = request.Request("%s/api/tweet"%os.environ.get("API_HOST"), method="POST")
     req.add_header('Content-Type', 'application/json')
     data = json.dumps(data).encode('utf-8')
+    print(data)
     try:
         resp = request.urlopen(req, data=data)
         content = resp.read()
