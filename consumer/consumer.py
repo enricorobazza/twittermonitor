@@ -14,7 +14,7 @@ print(brokers)
 print(topic)
 pred = SentimentPrediction()
 translator = Translator()
-# print("Finished training")
+print("Finished training")
 consumer = KafkaConsumer(topic, group_id = None, bootstrap_servers = brokers)
 
 positivo = 0
@@ -30,8 +30,9 @@ for message in consumer:
         "tracks": kafka_data["track"], 
         "text": frase, 
         "time": kafka_data["time"], 
-        "positive": resp
+        "positive": int(resp[0])
     }
+    print(data)
     req = request.Request("%s/api/tweet"%os.environ.get("API_HOST"), method="POST")
     req.add_header('Content-Type', 'application/json')
     data = json.dumps(data).encode('utf-8')
