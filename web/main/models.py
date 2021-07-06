@@ -35,6 +35,7 @@ class Tweet(models.Model):
     )
     text = models.TextField(max_length=280)
     time = models.DateTimeField()
+    positive = models.BooleanField()
     objects = models.DjongoManager()
 
     def __str__(self):
