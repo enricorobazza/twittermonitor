@@ -1,0 +1,46 @@
+
+{% extends '../base.html' %}
+{% load static %}
+
+{% block scss %}
+    <link type="text/x-scss" href="{% static 'scss/index.scss' %}" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block head %}
+    <title> Twitter Monitor | {{group.name}} </title>
+{% endblock %}
+
+{% block body %}
+    {% csrf_token %}
+    <div id="root"></div>
+    <script>
+        var context = {
+            tracks: [{% for track in tracks %}
+                {
+                    sentence: `{{track.sentence}}`,
+                    pk: {{track.pk}},
+                    deleteLink: `{% url 'delete_track' group.pk track.pk %}`
+                },
+            {% endfor %}],
+            tweets: [{% for tweet in tweets %}
+                {
+                    text: `{{tweet.text}}`,
+                    positive: 
+						{% if tweet.positive %} true 
+						{% else %} false {% endif %},
+					time: "{{tweet.time}}"
+                },
+            {% endfor %}],
+            userEmail: "{{user.email}}",
+            positive: {{positive}},
+            negative: {{negative}},
+            refreshLink: "{% url 'api_list_group_tweets' group.pk %}",
+            addLink: "{% url 'api_group_add_sentence' group.pk %}",
+            logoutLink: "{% url 'logout' %}",
+            homeLink: "{% url 'index' %}",
+        }
+    </script>
+
+    <script src="{% static 'js/tweets.bundle.js' %}"></script>
+{% endblock %}
+

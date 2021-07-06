@@ -12,7 +12,10 @@
     <h1>Tweets for {{sentence}}</h1>
     
     {% for tweet in tweets %}
-        <div>{{tweet.time}}: {{tweet.text}}</div>
+        <div class="
+            {% if tweet.positive %} text-success
+            {% else %} text-danger {% endif %}
+        ">{{tweet.time}}: {{tweet.text}}</div>
     {% endfor %}
 
 {% endblock %}

@@ -18,5 +18,9 @@ urlpatterns = [
     ])),
     path('auth/', include('rest_framework.urls')),
     path('track/', GroupView.get_tracks, name="get_tracks"),
-    # path('tweet', TweetView.add_tweet, name="add_tweet")
+    path('group/<int:group_pk>/track/<int:pk>/delete', GroupView.delete_track, name="delete_track"),
+    path('group/<int:pk>/', GroupView.list_tweets, name="api_list_group_tweets"),
+    path('group/<int:pk>/delete', GroupView.delete_group, name="delete_group"),
+    path('group/<int:pk>/track', GroupView.add_track, name="api_group_add_sentence"),
+    path('group/', GroupView.add_group, name="add_group"),
 ]

@@ -2,18 +2,35 @@
 {% extends '../base.html' %}
 {% load static %}
 
-{% block scss %}{% endblock %}
+{% block scss %}
+    <link type="text/x-scss" href="{% static 'scss/index.scss' %}" rel="stylesheet" media="screen">
+{% endblock %}
 
 {% block head %}
-    <title> TwitterKafka </title>
+    <title> Twitter Monitor </title>
 {% endblock %}
 
 {% block body %}
-    <h1>Welcome to  TwitterKafka</h1>
-    
+    {% csrf_token %}
     <div id="root"></div>
-    <script src="{% static 'js/index.bundle.js' %}"></script>
-    
 
+    <script>
+        var context = {
+            groups: [{% for group in groups %}
+                {
+                    pk: {{group.pk}},
+                    name: "{{group.name}}",
+                    link: "{% url 'list_group_tweets' group.pk %}",
+                    deleteLink: "{% url 'delete_group' group.pk %}",
+                },
+            {% endfor %}],
+            userEmail: "{{user.email}}",
+            addLink: "{% url 'add_group' %}",
+            logoutLink: "{% url 'logout' %}",
+            homeLink: "{% url 'index' %}",
+        }
+    </script>
+
+    <script src="{% static 'js/index.bundle.js' %}"></script>
 {% endblock %}
 

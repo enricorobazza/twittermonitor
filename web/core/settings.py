@@ -179,8 +179,6 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
     r'^/api'
 ]
 
-
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',

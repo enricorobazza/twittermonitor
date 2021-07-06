@@ -17,7 +17,8 @@ class Group(models.Model):
     # words = models.ManyToManyField(Track)
     tracks = models.ArrayReferenceField(
         to=Track,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
     )
     objects = models.DjongoManager()
 
@@ -35,7 +36,7 @@ class Tweet(models.Model):
     )
     text = models.TextField(max_length=280)
     time = models.DateTimeField()
-    positive = models.BooleanField()
+    positive = models.BooleanField(default=True)
     objects = models.DjongoManager()
 
     def __str__(self):

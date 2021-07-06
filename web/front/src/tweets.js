@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-const App = () => {
-  return <div>Welcome from React</div>;
-};
+import { Tweets } from "../screens/Tweets";
 
 let props;
 try {
@@ -12,7 +9,7 @@ try {
   props = {};
 }
 
-ReactDOM.render(<App {...props}></App>, document.getElementById("root"));
+ReactDOM.render(<Tweets {...props}></Tweets>, document.getElementById("root"));
 if (module.hot) {
   module.hot.accept();
 }

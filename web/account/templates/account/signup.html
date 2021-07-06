@@ -1,5 +1,5 @@
 
-{% extends 'login_main.html' %}
+{% extends './login_base.html' %}
 
 {% block content %}
   <h2>Registrar</h2>
@@ -11,7 +11,7 @@
       <div class="col-12">
   
         <div class="form-row">
-          <div class="form-group col-12">
+          <div class="form-group col-12 text-left">
             <label for="{{form.email.id_for_label}}">E-mail: </label>
             {{ form.email }}
             <span class="text-danger">
@@ -21,14 +21,7 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-12">
-            <label for=""organization">Organização: </label>
-            <input required type="text" class="form-control" name="organization"></input>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-12">
+          <div class="form-group col-12 text-left">
             
             <label for="{{form.password1.id_for_label}}">Senha: </label>
             {{ form.password1 }}
@@ -39,7 +32,7 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-12">
+          <div class="form-group col-12 text-left">
             <label for="{{form.password2.id_for_label}}">Repetir Senha: </label>
             {{ form.password2 }}
             <span class="text-danger">

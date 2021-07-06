@@ -3,10 +3,10 @@
 // $info: #2095EE;
 // $enable-rounded: false;
 // $dark: adjust-color(adjust-color($secondary, $blue:-30%), $lightness: -2%);
-// $gray: #dee2e6;
+$gray: #dee2e6;
 
 // $theme-colors: (
 //   "info-light": adjust-color($info, $lightness: 20%)
 // );
 
-@import '../bootstrap/scss/bootstrap.scss';
+@import "../bootstrap/scss/bootstrap.scss";
