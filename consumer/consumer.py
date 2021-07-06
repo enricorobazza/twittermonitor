@@ -10,6 +10,8 @@ from urllib import request, parse
 #configuração do kafka
 brokers = ['%s:%s'%(os.environ.get("KAFKA_HOST"), os.environ.get("KAFKA_PORT"))]
 topic = os.environ.get("KAFKA_TOPIC")
+print(brokers)
+print(topic)
 # pred = SentimentPrediction()
 translator = Translator()
 # print("Finished training")
@@ -24,7 +26,7 @@ for message in consumer:
     kafka_data = json.loads(message.value.decode('utf-8'))
     frase = translator.translate(kafka_data['tweet'], dest='pt').text
     print(frase)
-    data = {"track": kafka_data["track"], "tweet": frase, "time": kafka_data["time"]}
+    data = {"track": kafka_data["track"], "text": frase, "time": kafka_data["time"]}
     # data = str(json.dumps(data))
     # data = data.encode('utf-8')
 
