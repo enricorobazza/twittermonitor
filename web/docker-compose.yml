@@ -31,12 +31,13 @@ services:
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
     volumes:
       - .:/code
-    ports:
-      - "${API_PORT}:8000"
+    # ports:
+    #   - "${API_PORT}:8000"
     depends_on:
       - mongodb
-    networks:
-      - mongo-compose-network
+    # networks:
+    #   - mongo-compose-network
+    network_mode: "host"
 
 networks:
   mongo-compose-network:
