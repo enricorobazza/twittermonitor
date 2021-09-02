@@ -1,5 +1,23 @@
 # Twitter Monitor
 
+Este projeto utiliza a API do Twitter para monitoriar palavras-chave e realizar a análise de sentimentos.
+
+<img width="50%" src="./images/example.png" alt="Exemplo - Twitter Monitor" />
+
+## Arquitetura
+
+<img width="50%" src="./images/architecture.png" alt="Arquitetura do Projeto" />
+
+Todos os tweets são consumidos da API do Twitter por um producer, que os envia para o Kafka. Então, os tweets são lidos da fila do Kafka por um consumer, que faz a análise de sentimentos baseada em um modelo de regressão linear treinado em uma base de avaliações de filmes do IMDB. Com a análise feita, os tweets são inseridos em uma base de dados em MongoDB, para serem lidos posteriormente pelo servidor web.
+
+## Aplicação WEB
+
+Para a interação com o sistema, o projeto utiliza um back-end em Django (Python) e um front-end em ReactJS. Pelo sistema, o usuário pode cadastrar grupos de palavras, em que cada grupo é possível cadastrar sentenças a serem monitoradas da API do Twitter, e por fim, pode visualizar a quantidade de tweets negativos e positivos referentes a cada um dos grupos.
+
+## Artigo
+
+<a href="./Paper.pdf">Link</a>
+
 ## Execução
 
 ### 1. Docker
