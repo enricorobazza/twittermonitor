@@ -2,11 +2,11 @@
 
 Este projeto utiliza a API do Twitter para monitoriar palavras-chave e realizar a análise de sentimentos.
 
-<img width="50%" src="./images/example.png" alt="Exemplo - Twitter Monitor" />
+<img width="90%" src="./images/example.png" alt="Exemplo - Twitter Monitor" />
 
 ## Arquitetura
 
-<img width="50%" src="./images/architecture.png" alt="Arquitetura do Projeto" />
+<img width="90%" src="./images/architecture.png" alt="Arquitetura do Projeto" />
 
 Todos os tweets são consumidos da API do Twitter por um producer, que os envia para o Kafka. Então, os tweets são lidos da fila do Kafka por um consumer, que faz a análise de sentimentos baseada em um modelo de regressão linear treinado em uma base de avaliações de filmes do IMDB. Com a análise feita, os tweets são inseridos em uma base de dados em MongoDB, para serem lidos posteriormente pelo servidor web.
 
